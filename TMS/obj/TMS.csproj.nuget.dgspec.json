@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Facultate\\Practica\\.net\\proiect\\TMS\\TMS\\TMS.csproj": {}
+    "C:\\Facultate\\Practica\\.net\\en-summer-apprentice-net\\TMS\\TMS.csproj": {}
   },
   "projects": {
-    "C:\\Facultate\\Practica\\.net\\proiect\\TMS\\TMS\\TMS.csproj": {
+    "C:\\Facultate\\Practica\\.net\\en-summer-apprentice-net\\TMS\\TMS.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Facultate\\Practica\\.net\\proiect\\TMS\\TMS\\TMS.csproj",
+        "projectUniqueName": "C:\\Facultate\\Practica\\.net\\en-summer-apprentice-net\\TMS\\TMS.csproj",
         "projectName": "TMS",
-        "projectPath": "C:\\Facultate\\Practica\\.net\\proiect\\TMS\\TMS\\TMS.csproj",
+        "projectPath": "C:\\Facultate\\Practica\\.net\\en-summer-apprentice-net\\TMS\\TMS.csproj",
         "packagesPath": "C:\\Users\\Zsanett\\.nuget\\packages\\",
-        "outputPath": "C:\\Facultate\\Practica\\.net\\proiect\\TMS\\TMS\\obj\\",
+        "outputPath": "C:\\Facultate\\Practica\\.net\\en-summer-apprentice-net\\TMS\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Zsanett\\AppData\\Roaming\\NuGet\\NuGet.Config",

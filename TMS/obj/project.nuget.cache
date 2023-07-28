@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "OAdAr0roMKzWrdW9egbZUphDOFRqZunGsXtNHcst48dbALxMwTHgjP9XNg7Tcl10Pq0o6xxE4qi0m6m8uRV8Qw==",
+  "dgSpecHash": "aT7cXYN9LkTNoEIH5/Ua8h9k5l00M3yPAOf7RvHKCW7m9gP37lFCAQ/E8xvBsioZHElLgj8riFprKuJaakseHg==",
   "success": true,
-  "projectFilePath": "C:\\Facultate\\Practica\\.net\\proiect\\TMS\\TMS\\TMS.csproj",
+  "projectFilePath": "C:\\Facultate\\Practica\\.net\\en-summer-apprentice-net\\TMS\\TMS.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Zsanett\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\Zsanett\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
