@@ -32,14 +32,7 @@ namespace TMS.Controllers
 
             var events = _eventRepository.GetAll();
 
-            var dtoEvents = events.Select(e => new EventDto()
-            {
-                EventId = e.EventId,
-                Description = e.Description,
-                Name = e.Name,
-                EventTypeId = e.EventTypeId,
-                LocationId = e.LocationId
-            });
+            var dtoEvents = _mapper.Map<List<EventDto>>(events);
 
             return Ok(dtoEvents);
 
@@ -75,7 +68,6 @@ namespace TMS.Controllers
             if(!eventPatch.EventName.IsNullOrEmpty()) eventEntity.Name = eventPatch.EventName;
             if (!eventPatch.EventDescription.IsNullOrEmpty()) eventEntity.Description = eventPatch.EventDescription;
 
-            //_mapper.Map(eventPatch, eventEntity);
             _eventRepository.Update(eventEntity);
             return NoContent();
         }
