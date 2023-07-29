@@ -6,6 +6,7 @@ using TMS.Models;
 using TMS.Repositories;
 using Microsoft.IdentityModel.Tokens;
 using TMS.Services;
+using System;
 
 namespace TMS.Controllers
 {
@@ -30,10 +31,6 @@ namespace TMS.Controllers
         public ActionResult<List<VenueDto>> GetAll()
         {
 
-            /*var venues = _venueRepository.GetAll();
-            var venueDto = _mapper.Map<List<VenueDto>>(venues);
-            return Ok(venueDto);*/
-
             var venues = _venueService.GetAll();
             var venuesDto = _mapper.Map<List<VenueDto>>(venues);
             return Ok(venuesDto);
@@ -54,18 +51,11 @@ namespace TMS.Controllers
         [HttpPatch]
         public async Task<ActionResult<VenueDto>> Patch(VenueDto venuePatch)
         {
-            if (venuePatch == null) throw new ArgumentNullException(nameof(venuePatch));
-            var venueEntity = await _venueRepository.GetById(venuePatch.VenueId);
-
-            if (venueEntity == null)
+            if (@venuePatch == null)
             {
                 return NotFound();
             }
-
-            if (!venuePatch.Location.IsNullOrEmpty()) venueEntity.Location = venuePatch.Location;
-            if (!venuePatch.Type.IsNullOrEmpty()) venueEntity.Type = venuePatch.Type;
-            if (venuePatch.Capacity >= 0) venueEntity.Capacity = venuePatch.Capacity;
-            _venueRepository.Update(venueEntity);
+            _venueService.Update(@venuePatch);
             return NoContent();
         }
 
@@ -73,12 +63,7 @@ namespace TMS.Controllers
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var venueEntity = await _venueRepository.GetById(id);
-            if (venueEntity == null)
-            {
-                return NotFound();
-            }
-            _venueRepository.Delete(venueEntity);
+            _venueService.Delete(id);
             return NoContent();
         }
 

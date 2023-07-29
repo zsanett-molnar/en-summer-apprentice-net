@@ -5,14 +5,14 @@ namespace TMS.Services
 {
     public interface IVenueService
     {
-        IEnumerable<Venue> GetAll();
+        IEnumerable<VenueDto> GetAll();
 
         Task<VenueDto> GetById(int id);
 
         int Add(VenueDto @venue);
 
-        void Update(Venue @venue);
+        void Update(VenueDto @venue);
 
-        void Delete(Venue @venue);
+        void Delete(int id);
     }
 }

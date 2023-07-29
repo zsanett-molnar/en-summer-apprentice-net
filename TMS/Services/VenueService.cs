@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using TMS.Models;
 using TMS.Models.Dto;
 using TMS.Repositories;
@@ -30,9 +31,10 @@ namespace TMS.Services
         }
 
 
-        public void Delete(Venue venue)
+        public async void Delete(int id)
         {
-            throw new NotImplementedException();
+            var venueEntity = await _venueRepository.GetById(id);
+            _venueRepository.Delete(venueEntity);
         }
 
         public async Task<VenueDto> GetById(int id)
@@ -43,15 +45,23 @@ namespace TMS.Services
 
         }
 
-        public void Update(Venue venue)
+        public async void Update(VenueDto venuePatch)
         {
-            throw new NotImplementedException();
+            if (venuePatch == null) throw new ArgumentNullException(nameof(venuePatch));
+            var venueEntity = await _venueRepository.GetById(venuePatch.VenueId);
+
+
+            if (!venuePatch.Location.IsNullOrEmpty()) venueEntity.Location = venuePatch.Location;
+            if (!venuePatch.Type.IsNullOrEmpty()) venueEntity.Type = venuePatch.Type;
+            if (venuePatch.Capacity >= 0) venueEntity.Capacity = venuePatch.Capacity;
+            _venueRepository.Update(venueEntity);
         }
 
-        IEnumerable<Venue> IVenueService.GetAll()
+        IEnumerable<VenueDto> IVenueService.GetAll()
         {
             var venues = _venueRepository.GetAll();
-            return venues;
+            var venuesDto = _mapper.Map<List<VenueDto>>(venues);
+            return venuesDto;
         }
     }
 }
