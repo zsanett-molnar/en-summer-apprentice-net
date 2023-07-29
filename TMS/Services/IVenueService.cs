@@ -1,4 +1,5 @@
 ﻿using TMS.Models;
+using TMS.Models.Dto;
 
 namespace TMS.Services
 {
@@ -6,9 +7,9 @@ namespace TMS.Services
     {
         IEnumerable<Venue> GetAll();
 
-        Task<Venue> GetById(int id);
+        Task<VenueDto> GetById(int id);
 
-        int Add(Venue @venue);
+        int Add(VenueDto @venue);
 
         void Update(Venue @venue);
 

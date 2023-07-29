@@ -43,15 +43,12 @@ namespace TMS.Controllers
         [HttpGet]
         public async Task<ActionResult<VenueDto>> GetById(int id)
         {
-            var @venue = await _venueRepository.GetById(id);
-
-            if (@venue == null)
-            {
+            var @venue = await _venueService.GetById(id);
+             if(@venue == null) 
+             { 
                 return NotFound();
-            }
-
-            var venueDto = _mapper.Map<VenueDto>(@venue);
-            return Ok(venueDto);
+             }
+            return Ok(venue);
         }
 
         [HttpPatch]
@@ -65,8 +62,8 @@ namespace TMS.Controllers
                 return NotFound();
             }
 
-            if (!venuePatch.Location.IsNullOrEmpty()) venueEntity.Location = venueEntity.Location;
-            if (!venuePatch.Type.IsNullOrEmpty()) venueEntity.Type = venueEntity.Type;
+            if (!venuePatch.Location.IsNullOrEmpty()) venueEntity.Location = venuePatch.Location;
+            if (!venuePatch.Type.IsNullOrEmpty()) venueEntity.Type = venuePatch.Type;
             if (venuePatch.Capacity >= 0) venueEntity.Capacity = venuePatch.Capacity;
             _venueRepository.Update(venueEntity);
             return NoContent();
@@ -92,13 +89,7 @@ namespace TMS.Controllers
             {
                 return NotFound();
             }
-
-            var newVenue = new Venue();
-
-            _mapper.Map(venuePost, newVenue);
-
-            _venueRepository.Add(newVenue);
-            return Ok(newVenue.VenueId);
+            return Ok(_venueService.Add(venuePost));
         }
 
 

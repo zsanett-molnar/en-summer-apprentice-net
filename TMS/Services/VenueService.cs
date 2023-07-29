@@ -17,19 +17,30 @@ namespace TMS.Services
             _mapper = mapper;
         }
 
-        public int Add(Venue venue)
+        public int Add(VenueDto venue)
         {
-            throw new NotImplementedException();
+ 
+            var newVenue = new Venue();
+
+            _mapper.Map(venue, newVenue);
+
+            _venueRepository.Add(newVenue);
+
+            return newVenue.VenueId;
         }
+
 
         public void Delete(Venue venue)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Venue> GetById(int id)
+        public async Task<VenueDto> GetById(int id)
         {
-            throw new NotImplementedException();
+            var @venue = await _venueRepository.GetById(id);
+            var venueDto = _mapper.Map<VenueDto>(@venue);
+            return venueDto;
+
         }
 
         public void Update(Venue venue)
