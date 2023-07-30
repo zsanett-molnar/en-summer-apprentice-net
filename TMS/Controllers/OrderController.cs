@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using TMS.Models;
 using TMS.Models.Dto;
 using TMS.Repositories;
+using TMS.Services;
 
 namespace TMS.Controllers
 {
@@ -12,12 +13,14 @@ namespace TMS.Controllers
     [ApiController]
     public class OrderController : Controller
     {
+        private readonly IOrderService _orderService;
         private readonly IOrderRepository _orderRepository;
         private readonly ITicketCategoryRepository _ticketCategoryRepository;
         private readonly IMapper _mapper;
 
-        public OrderController(IOrderRepository orderRepository, ITicketCategoryRepository ticketCategoryRepository, IMapper mapper)
+        public OrderController(IOrderService orderService, IOrderRepository orderRepository, ITicketCategoryRepository ticketCategoryRepository, IMapper mapper)
         {
+            _orderService = orderService;
             _orderRepository = orderRepository;
             _ticketCategoryRepository = ticketCategoryRepository;
             _mapper = mapper;
@@ -26,18 +29,13 @@ namespace TMS.Controllers
         [HttpGet]
         public ActionResult<List<OrderDto>> GetAll()
         {
-
-            var orders = _orderRepository.GetAll();
-
-            var dtoOrders = orders.Select(o => new OrderDto()
+            var orders = _orderService.GetAll();
+            if(orders == null)
             {
-                OrderId = o.OrderId,
-                OrderedAt = o.OrderedAt,
-                NumberOfTickets = o.NumberOfTickets,
-                TotalPrice = o.TotalPrice
-            });
+                return NotFound();
+            }
 
-            return Ok(dtoOrders);
+            return Ok(_orderService.GetAll());
 
         }
 
@@ -45,60 +43,36 @@ namespace TMS.Controllers
         public async Task<ActionResult<OrderDto>> GetById(int id)
         {
 
-            var @order = await _orderRepository.GetById(id);
-
-            if (@order == null)
+            var @order = await _orderService.GetById(id);
+            if(@order == null)
             {
                 return NotFound();
             }
 
-
-            var orderDto = _mapper.Map<OrderDto>(@order);
-
-            return Ok(orderDto);
+            return Ok(@order);
 
         }
 
         [HttpPatch]
         public async Task<ActionResult<OrderDto>> Patch(OrderPatchDto orderPatch)
         {
-            var orderEntity = await _orderRepository.GetById(orderPatch.OrderId);
-
-            if (orderEntity == null)
-            {
-                return NotFound();
-            }
-
-            if (orderPatch.NumberOfTickets != 0) orderEntity.NumberOfTickets = orderPatch.NumberOfTickets;
-
-            var @ticketCategory = await _ticketCategoryRepository.GetById(orderEntity.TicketCategoryId);
-
-            if (@ticketCategory == null)
-            {
-                return NotFound();
-            }
-
-            var newSum = orderEntity.NumberOfTickets * @ticketCategory.Price;
-            orderEntity.TotalPrice = newSum;
-            _orderRepository.Update(orderEntity);
-            return NoContent();
+         
+            var order = await _orderService.Update(orderPatch);
+            return Ok(order);
         }
 
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var orderEntity = await _orderRepository.GetById(id);
-            if (orderEntity == null)
-            {
-                return NotFound();
-            }
-            _orderRepository.Delete(orderEntity);
+            _orderService.Delete(id);
             return NoContent();
         }
 
         [HttpPost]
         public async Task<ActionResult> Add(OrderPostDto orderPost)
         {
+
+            var addedOrder = await _orderService.Add(orderPost);
             if (orderPost == null)
             {
                 return NotFound();
@@ -109,27 +83,12 @@ namespace TMS.Controllers
                 return NotFound();
             }
 
-            var @ticketCategory = await _ticketCategoryRepository.GetById(orderPost.TicketCategoryId);
-
-            if (@ticketCategory == null)
+            if (orderPost.TicketCategoryId == null)
             {
                 return NotFound();
             }
 
-            var newSum = orderPost.NumberOfTickets * @ticketCategory.Price;
-
-            var newOrder = new Order()
-            {
-                 OrderId= orderPost.OrderId,
-                 UserId = orderPost.UserId,
-                 TicketCategoryId = orderPost.TicketCategoryId,
-                 OrderedAt = DateTime.Now,
-                 NumberOfTickets = orderPost.NumberOfTickets,
-                 TotalPrice= newSum
-            };
-
-            _orderRepository.Add(newOrder);
-            return Ok(newOrder.OrderId);
+            return Ok(addedOrder);
         }
 
 

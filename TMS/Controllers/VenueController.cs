@@ -15,16 +15,11 @@ namespace TMS.Controllers
     public class VenueController : Controller
     {
         private readonly IVenueService _venueService;
-        private readonly IVenueRepository _venueRepository;
-        private readonly IMapper _mapper;
-        private readonly ILogger _logger;
 
         public VenueController(IVenueService venueService, IVenueRepository venueRepository, IMapper mapper, ILogger<VenueController> logger)
         {
             _venueService = venueService;
-            _venueRepository = venueRepository;
-            _mapper = mapper;
-            _logger = logger;
+
         }
 
         [HttpGet]
@@ -32,8 +27,7 @@ namespace TMS.Controllers
         {
 
             var venues = _venueService.GetAll();
-            var venuesDto = _mapper.Map<List<VenueDto>>(venues);
-            return Ok(venuesDto);
+            return Ok(venues);
 
         }
 
