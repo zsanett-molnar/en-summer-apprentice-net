@@ -15,6 +15,7 @@ builder.Services.AddTransient<IVenueRepository, VenueRepository>();
 builder.Services.AddTransient<ITicketCategoryRepository, TicketCategoryRepository>();
 builder.Services.AddTransient<IVenueService, VenueService>();
 builder.Services.AddTransient<IOrderService , OrderService>();
+builder.Services.AddTransient<IEventService, EventService>();
 //builder.Services.AddTransient<IVenueRepository, VenueService>();
 //builder.Services.AddSingleton<ITestService, TestService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

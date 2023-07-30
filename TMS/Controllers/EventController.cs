@@ -7,6 +7,7 @@ using System.ComponentModel;
 using TMS.Models;
 using TMS.Models.Dto;
 using TMS.Repositories;
+using TMS.Services;
 
 namespace TMS.Controllers
 {
@@ -15,41 +16,30 @@ namespace TMS.Controllers
     public class EventController : ControllerBase
 
     {
-        private readonly IEventRepository _eventRepository;
-        private readonly IMapper _mapper;
-        private readonly ILogger _logger;
+        private readonly IEventService _eventService;
 
-        public EventController(IEventRepository eventRepository, IMapper mapper, ILogger<EventController> logger)
+        public EventController(IEventService eventService)
         {
-            _eventRepository = eventRepository;
-            _mapper = mapper;
-            _logger = logger;
+            _eventService = eventService;
+            
         }
 
         [HttpGet]
         public ActionResult<List<EventDto>> GetAll()
         {
-
-            var events = _eventRepository.GetAll();
-
-            var dtoEvents = _mapper.Map<List<EventDto>>(events);
-
-            return Ok(dtoEvents);
+            return Ok(_eventService.GetAll());
 
         }
 
         [HttpGet]
         public async Task<ActionResult<EventDto>> GetById(int id)
         {
-            var @event = await _eventRepository.GetById(id);
-
-            if(@event == null) 
+           var eventDto = await _eventService.GetById(id);
+            if(eventDto == null)
             {
                 return NotFound();
             }
 
-            var eventDto = _mapper.Map<EventDto>(@event); 
-            
             return Ok(eventDto);
         }
 
@@ -58,46 +48,23 @@ namespace TMS.Controllers
         public async Task<ActionResult<EventPatchDto>> Patch(EventPatchDto eventPatch)
         {
             if (eventPatch == null) throw new ArgumentNullException(nameof(eventPatch));
-            var eventEntity = await _eventRepository.GetById(eventPatch.EventId);
-
-            if(eventEntity == null)
-            {
-                return NotFound();
-            }
-
-            if(!eventPatch.EventName.IsNullOrEmpty()) eventEntity.Name = eventPatch.EventName;
-            if (!eventPatch.EventDescription.IsNullOrEmpty()) eventEntity.Description = eventPatch.EventDescription;
-
-            _eventRepository.Update(eventEntity);
+            _eventService.Update(eventPatch);
             return NoContent();
         }
 
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
-            var eventEntity = await _eventRepository.GetById(id);
-            if(eventEntity == null)
-            {
-                return NotFound();
-            }
-            _eventRepository.Delete(eventEntity);
+            _eventService.Delete(id);
             return NoContent();
         }
 
         [HttpPost]
         public async Task<ActionResult> Add(EventPostDto eventPost)
         {
-            if(eventPost == null)
-            {
-                return NotFound();
-            }
-
-            var newEvent = new Event();
-
-            _mapper.Map(eventPost, newEvent);
-
-            _eventRepository.Add(newEvent);
-            return Ok(newEvent.EventId);
+            var newEvent = _eventService.Add(eventPost);
+            return Ok(newEvent);
         }
     }
-}
+ }
+

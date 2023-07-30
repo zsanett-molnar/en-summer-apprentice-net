@@ -14,16 +14,11 @@ namespace TMS.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
-        private readonly IOrderRepository _orderRepository;
-        private readonly ITicketCategoryRepository _ticketCategoryRepository;
-        private readonly IMapper _mapper;
 
-        public OrderController(IOrderService orderService, IOrderRepository orderRepository, ITicketCategoryRepository ticketCategoryRepository, IMapper mapper)
+
+        public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
-            _orderRepository = orderRepository;
-            _ticketCategoryRepository = ticketCategoryRepository;
-            _mapper = mapper;
         }
 
         [HttpGet]
